@@ -42,6 +42,48 @@ void insert(int key) {
          << " at index " << index << endl;
 }
 
+bool search(int key) {
+    int index = midSquareHash(key);
+
+    for (int currentKey : hashTable[index]) {
+        if (currentKey == key) {
+            cout << "Key " << key << " found at index "
+                 << index << endl;
+            return true;
+        }
+    }
+
+    cout << "Key " << key << " not found." << endl;
+    return false;
+}
+
+void removeKey(int key) {
+    int index = midSquareHash(key);
+
+    bool removed = false;
+
+    for (auto it = hashTable[index].begin();
+         it != hashTable[index].end();
+         ++it) {
+
+        if (*it == key) {
+            it = hashTable[index].erase(it);
+            removed = true;
+
+            cout << "Deleted key " << key
+                 << " from index " << index << endl;
+
+            break;
+        }
+    }
+
+    if (!removed) {
+        cout << "Key " << key
+             << " cannot be deleted because it is not present."
+             << endl;
+    }
+}
+
 void displayTable() {
     cout << "\nHash Table using Separate Chaining:\n";
 
@@ -62,6 +104,7 @@ void displayTable() {
     }
 }
 
+
 int main() {
     int data[20] = {
         87, 0, 13, 26, 39,
@@ -76,6 +119,19 @@ int main() {
         insert(data[i]);
     }
 
+    displayTable();
+
+    cout << "\nSearching for keys:\n";
+    search(87);
+    search(43);
+    search(100);
+
+    cout << "\nDeleting keys:\n";
+    removeKey(87);
+    removeKey(43);
+    removeKey(100);
+
+    cout << "\nTable after deletion:\n";
     displayTable();
 
     return 0;
