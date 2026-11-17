@@ -8,9 +8,12 @@
 */
 
 #include <iostream>
+#include <list>
 using namespace std;
 
 const int TABLE_SIZE = 10;
+
+list<int> hashTable[TABLE_SIZE];
 
 int midSquareHash(int key) {
     long long square = (long long)key * key;
@@ -30,46 +33,36 @@ int midSquareHash(int key) {
     return middleValue % TABLE_SIZE;
 }
 
-class HashTable {
-private:
-    int table[TABLE_SIZE];
+void insert(int key) {
+    int index = midSquareHash(key);
 
-public:
-    HashTable() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            table[i] = -1;
-        }
-    }
+    hashTable[index].push_back(key);
 
-    void insert(int key) {
-        int index = midSquareHash(key);
+    cout << "Inserted " << key
+         << " at index " << index << endl;
+}
 
-        table[index] = key;
+void displayTable() {
+    cout << "\nHash Table using Separate Chaining:\n";
 
-        cout << "Inserted " << key
-             << " at index " << index << endl;
-    }
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        cout << i << " -> ";
 
-    void display() {
-        cout << "\nHash Table:\n";
-
-        for (int i = 0; i < TABLE_SIZE; i++) {
-            cout << i << " -> ";
-
-            if (table[i] == -1) {
-                cout << "EMPTY";
-            } else {
-                cout << table[i];
+        if (hashTable[i].empty()) {
+            cout << "EMPTY";
+        } else {
+            for (int key : hashTable[i]) {
+                cout << key << " -> ";
             }
 
-            cout << endl;
+            cout << "NULL";
         }
+
+        cout << endl;
     }
-};
+}
 
 int main() {
-    HashTable hashTable;
-
     int data[20] = {
         87, 0, 13, 26, 39,
         52, 65, 78, 91, 4,
@@ -77,13 +70,13 @@ int main() {
         82, 95, 8, 21, 34
     };
 
-    cout << "Inserting 20 personalized values without collision handling:\n\n";
+    cout << "Inserting 20 personalized values using separate chaining:\n\n";
 
     for (int i = 0; i < 20; i++) {
-        hashTable.insert(data[i]);
+        insert(data[i]);
     }
 
-    hashTable.display();
+    displayTable();
 
     return 0;
 }
